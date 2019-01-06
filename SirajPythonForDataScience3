@@ -1,0 +1,49 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jan  5 07:51:08 2019
+
+@author: 748959
+"""
+
+import numpy as np
+from lightfm.datasets import fetch_stackexchange
+from lightfm import lightFM
+
+# Carrega 100k de filmes e suas clasificações e coloca como acuracia minima 4 de 5.
+data = fetch_stackexchange()
+
+# instancia e treina nosso modelo nos dois modelos de treinamento,
+# colaborativo e conteudo, tornando hibrido
+model = lightFM(loss='warp')
+model.fit(data['train'],epochs=30, num_threads=2)
+
+# criando as recomendações
+def get_recommendation(model,data,user_ids):
+    
+    #usarios, numeros de itens e filmes
+    n_users, n_items = data['train'].shape
+    
+    for user_id in user_ids:
+        
+        #gera as avalições possitivas baseadas no treinamento e na auracia,
+        #vai retornar pelos indices
+        known_positives = data['item_feature_labels'][data['train'].tocsr()[user_id].indices]
+        
+        #preve o que vc vai gostar
+        scores = model.predict(user_id,np.arange(n_items))
+        
+        #rankeia na ordem decrescente os filmes pelo sinal negativo
+        top_items = data['item_feature_labels'][np.argsort(-scores)]
+        
+        print("User %s" %user_id)
+        print("    known positives")
+        
+        for x in known_positivies[:3]: #um for que imprime 3 filmes que os usuarios escolheram
+            print("        %s" %x)
+            
+        print("    Recommended:")
+        
+        for x in top_items[:3]: #um for que imprime 3 recomedações de filmes
+            print("        %s" %x)
+            
+sample_recommendation(model,data,[50,256,539]) #escolhe 3 users diferentes para a previsão
