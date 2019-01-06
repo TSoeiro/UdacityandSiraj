@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan  4 16:06:53 2019
+
+@author: 748959
+"""
+from sklearn import tree
+
+#x=[temperatura, umidade do ar(%), velocidade do vento(km/h)]
+
+X=[[35,80,6],[20,35,20],[29,50,12],[18,23,10],[37,70,25],[25,45,13],[17,64,22],[30,70,7],
+    [27,67,4],[21,75,7],[31,85,30],[34,67,9],[19,21,14],[28,48,23],[22,35,21],[36,78,4],
+    [26,56,9],[23,44,18],[32,67,24],[24,38,8]]
+
+Y=['Sem chuva','Sem chuva','Chovendo','Chovendo','Sem chuva','Chovendo','Sem chuva','Chovendo'
+   ,'Chovendo','Sem chuva','Chovendo','Chovendo','Chovendo','Sem chuva','Sem chuva','Sem chuva','Chovendo'
+   ,'Chovendo','Sem chuva','Chovendo']
+
+clf=tree.DecisionTreeClassifier()
+
+clf=clf.fit(X,Y)
+
+prediction = clf.predict([[28,33,10]])
+
+print (prediction)
